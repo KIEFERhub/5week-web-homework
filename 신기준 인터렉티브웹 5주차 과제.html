@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>신기준 5주차 과제
+    </title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #111;
+        }
+        .background-dot {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 0%;
+            transition: transform 0.2s ease-out, background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+<script>
+let backgroundDotsHTML = "";
+const dotCount = 700;
+for (let i = 0; i < dotCount; i++) {
+    let x = Math.random() * window.innerWidth;
+    let y = Math.random() * window.innerHeight;
+    backgroundDotsHTML += `<div class='background-dot' 
+                style='left:${x}px; top:${y}px;'>
+                </div>`;
+}
+
+document.body.innerHTML += backgroundDotsHTML;
+
+function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+}
+
+document.addEventListener("mousemove", (e) => {
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    const dots = document.querySelectorAll(".background-dot");
+
+    dots.forEach(dot => {
+        const dotRect = dot.getBoundingClientRect();
+        const dotX = dotRect.left + dotRect.width / 2;
+        const dotY = dotRect.top + dotRect.height / 2;
+
+        const distance = Math.sqrt((mouseX - dotX) ** 2 + (mouseY - dotY) ** 2);
+
+        if (distance < 100) {
+            const angle = Math.atan2(dotY - mouseY, dotX - mouseX);
+            const offsetX = Math.cos(angle) * 50;
+            const offsetY = Math.sin(angle) * 50;
+
+            dot.style.transform = `translate(${offsetX}px, ${offsetY}px)`;
+
+            dot.style.backgroundColor = getRandomColor();
+
+            setTimeout(() => {
+                dot.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
+            }, 1500);
+        } else {
+            dot.style.transform = "translate(0px, 0px)";
+        }
+    });
+});
+</script>
+
+</body>
+</html>
